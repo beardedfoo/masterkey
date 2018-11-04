@@ -13,7 +13,7 @@ import (
 	"github.com/beardedfoo/masterkey"
 )
 
-// ExampleAES256CBC demonstrates implementing
+// ExampleAES256CBC demonstrates how to derive a key and IV for CBC mode
 func ExampleAES256CBC() {
 	// Generate a random plaintext
 	plaintext := make([]byte, aes.BlockSize*4)
