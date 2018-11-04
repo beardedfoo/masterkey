@@ -6,6 +6,7 @@ import (
 	"crypto/cipher"
 	"crypto/md5"
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"log"
@@ -38,13 +39,14 @@ func ExampleAES256CBC() {
 	log.Printf("generated encryption subkey: %v", encKey)
 
 	// Create an IV for this plaintext
-	checksum := md5.Sum(plaintext)
+	h := md5.Sum(plaintext)
+	checksum := hex.EncodeToString(h[:])
 	ivID := fmt.Sprintf("iv-%v", checksum)
 	iv, err := k.SubKey(ivID, aes.BlockSize)
 	if err != nil {
-		log.Fatalf("error creating iv material: %v", err)
+		log.Fatalf("error creating %v material: %v", ivID, err)
 	}
-	log.Printf("generated iv: %v", iv)
+	log.Printf("generated %v: %v", ivID, iv)
 
 	// Create the AES block cipher
 	block, err := aes.NewCipher(encKey)
