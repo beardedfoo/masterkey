@@ -10,19 +10,19 @@ import (
 
 // New returns a MasterKey struct
 func New(material []byte) MasterKey {
-	return MasterKey{Material: material}
+	return MasterKey{material: material}
 }
 
 // MasterKey is a crypto key that rather than being used directly generates
 // subkeys that are used for different purposes
 type MasterKey struct {
-	Material []byte
+	material []byte
 }
 
 // SubKey returns a deterministcally generated subkey of `size` bytes
 func (m MasterKey) SubKey(id string, size int) ([]byte, error) {
 	material := make([]byte, size)
-	kdf := hkdf.New(sha256.New, m.Material, nil, []byte(id))
+	kdf := hkdf.New(sha256.New, m.material, nil, []byte(id))
 	if _, err := io.ReadFull(kdf, material); err != nil {
 		return nil, err
 	}
